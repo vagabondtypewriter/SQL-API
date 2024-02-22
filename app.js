@@ -20,7 +20,8 @@ connection.connect(err => {
   console.log('Connected to MySQL database');
 });
 
-app.get('/user', (req, res) => {
+// 
+app.get('/getAllUsers', (req, res) => {
   // TODO add specific functionality for admin panel as requested
   console.log("Got a new request");
 
@@ -33,12 +34,13 @@ app.get('/user', (req, res) => {
   if (limit !== undefined) {
     console.log("Sending with limit");
     sql += ` LIMIT ${parseInt(limit)}`;
+    if (offset !== undefined) {
+      console.log("Sending with offset");
+      sql += ` OFFSET ${parseInt(offset)}`;
+    }
   }
 
-  if (offset !== undefined) {
-    console.log("Sending with offset");
-    sql += ` OFFSET ${parseInt(offset)}`;
-  }
+  // if offset is not defined, it becomes ignored
 
   console.log("SQL: ", sql);
 
