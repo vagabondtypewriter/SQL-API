@@ -58,9 +58,6 @@ app.get('/getUser', (req, res) => {
   const displayName = req.query.display_name;
   const email = req.query.email;
 
-  console.log(id);
-  console.log(displayName);
-  console.log(email);
   // Check if only one field is defined
   const definedFields = [id, displayName, email].filter(field => field !== undefined);
   if (definedFields.length !== 1) {
@@ -68,7 +65,6 @@ app.get('/getUser', (req, res) => {
     return;
   }
 
-  // Construct SQL query dynamically based on which field is defined
   let sql = 'SELECT * FROM user WHERE ';
   let params = [];
 
@@ -83,8 +79,31 @@ app.get('/getUser', (req, res) => {
     params.push(email);
   }
 
-  // Execute the query with appropriate parameters
   connection.query(sql, params, (err, results) => {
+    if (err) {
+      console.error('Error executing MySQL query:', err);
+      res.status(500).json({ error: 'Internal Server Error' });
+      return;
+    }
+
+    res.json(results);
+  });
+});
+
+app.get('/deleteUser', (req, res) => {
+  // Extract user_id from query parameters
+  const id = req.query.user_id;
+
+  // Check if user_id is not provided
+  if (id === undefined) {
+    res.status(400).json({ error: 'user_id is required in the query parameters.' });
+    return;
+  }
+
+  let sql = 'DELETE FROM user WHERE user_id = ?';
+
+  // Execute the query with user_id as parameter
+  connection.query(sql, [parseInt(id)], (err, results) => {
     if (err) {
       console.error('Error executing MySQL query:', err);
       res.status(500).json({ error: 'Internal Server Error' });
