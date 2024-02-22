@@ -27,8 +27,26 @@ connection.connect(err => {
 app.get('/user', (req, res) => {
   console.log("Got a new request");
 
-  // SQL query to select all fields from the user table
+  // Extract query parameters
+  const { offset, limit } = req.query;
+  // SQL query to select user data with offset and limit
+
+
+  console.log("Limit: ", limit);
+  console.log("Offset: ", limit);
   let sql = 'SELECT user_id, display_name, hashed_password, email FROM user';
+  
+  // Add OFFSET and LIMIT clauses if offset and limit are provided
+  if (offset !== undefined) {
+    console.log("Sending with offset");
+    sql += ` OFFSET ${parseInt(offset)}`;
+  }
+
+   // Add OFFSET and LIMIT clauses if offset and limit are provided
+  if (limit !== undefined) {
+    console.log("Sending with limit");
+    sql += ` LIMIT ${parseInt(limit)}`;
+  }
 
   connection.query(sql, (err, results) => {
     if (err) {
@@ -41,6 +59,7 @@ app.get('/user', (req, res) => {
     res.json(results);
   });
 });
+
 
 // Start the server
 const port = process.env.PORT || 3000;
