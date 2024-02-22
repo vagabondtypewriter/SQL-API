@@ -20,16 +20,15 @@ connection.connect(err => {
   console.log('Connected to MySQL database');
 });
 
-// 
+// GET ALL USERS
 app.get('/getAllUsers', (req, res) => {
-  // TODO add specific functionality for admin panel as requested
   console.log("Got a new request");
 
   const { offset, limit } = req.query;
 
   console.log("Limit: ", limit);
   console.log("Offset: ", limit);
-  let sql = 'SELECT user_id, display_name, hashed_password, email FROM user';
+  let sql = 'SELECT * FROM user';
   
   if (limit !== undefined) {
     console.log("Sending with limit");
@@ -39,8 +38,6 @@ app.get('/getAllUsers', (req, res) => {
       sql += ` OFFSET ${parseInt(offset)}`;
     }
   }
-
-  // if offset is not defined, it becomes ignored
 
   console.log("SQL: ", sql);
 
@@ -54,6 +51,50 @@ app.get('/getAllUsers', (req, res) => {
     res.json(results);
   });
 });
+
+app.get('/getUser', (req, res) => {
+  // Extract fields from query parameters
+  const id = req.query.user_id;
+  const displayName = req.query.display_name;
+  const email = req.query.email;
+
+  console.log(id);
+  console.log(displayName);
+  console.log(email);
+  // Check if only one field is defined
+  const definedFields = [id, displayName, email].filter(field => field !== undefined);
+  if (definedFields.length !== 1) {
+    res.status(400).json({ error: 'Exactly one of user_id, display_name, or email must be defined.' });
+    return;
+  }
+
+  // Construct SQL query dynamically based on which field is defined
+  let sql = 'SELECT * FROM user WHERE ';
+  let params = [];
+
+  if (id !== undefined) {
+    sql += 'user_id = ?';
+    params.push(parseInt(id));
+  } else if (displayName !== undefined) {
+    sql += 'display_name LIKE ?';
+    params.push(displayName);
+  } else if (email !== undefined) {
+    sql += 'email = ?';
+    params.push(email);
+  }
+
+  // Execute the query with appropriate parameters
+  connection.query(sql, params, (err, results) => {
+    if (err) {
+      console.error('Error executing MySQL query:', err);
+      res.status(500).json({ error: 'Internal Server Error' });
+      return;
+    }
+
+    res.json(results);
+  });
+});
+
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
