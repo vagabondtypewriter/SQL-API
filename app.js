@@ -36,17 +36,19 @@ app.get('/user', (req, res) => {
   console.log("Offset: ", limit);
   let sql = 'SELECT user_id, display_name, hashed_password, email FROM user';
   
+   // Add OFFSET and LIMIT clauses if offset and limit are provided
+  if (limit !== undefined) {
+    console.log("Sending with limit");
+    sql += ` LIMIT ${parseInt(limit)}`;
+  }
+
   // Add OFFSET and LIMIT clauses if offset and limit are provided
   if (offset !== undefined) {
     console.log("Sending with offset");
     sql += ` OFFSET ${parseInt(offset)}`;
   }
 
-   // Add OFFSET and LIMIT clauses if offset and limit are provided
-  if (limit !== undefined) {
-    console.log("Sending with limit");
-    sql += ` LIMIT ${parseInt(limit)}`;
-  }
+  console.log("SQL: ", sql);
 
   connection.query(sql, (err, results) => {
     if (err) {
