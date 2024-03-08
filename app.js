@@ -13,7 +13,7 @@ const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 
-app.get('/getAllUsers', (req, res) => {
+app.get('/getUsers', (req, res) => {
   const offset = req.query.offset;
   const limit = req.query.limit;
 
@@ -26,6 +26,9 @@ app.get('/getAllUsers', (req, res) => {
       console.log("Sending with offset");
       sql += ` OFFSET ${parseInt(offset)}`;
     }
+  } else {
+    console.log("Sending with default limit");
+    sql += ` LIMIT ${parseInt(limit)}`;
   }
 
   pool.query(sql, (err, results) => {
@@ -173,7 +176,7 @@ app.get('/editUser', (req, res) => {
   });
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 9997;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
