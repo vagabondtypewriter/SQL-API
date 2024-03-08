@@ -153,9 +153,7 @@ app.get('/editUser', (req, res) => {
     return;
   }
 
-  // Add modification timestamp
-  setValues.push('modified = NOW()'); // Using NOW() to update current timestamp
-
+  setValues.push('modified = NOW()');
   sql += setValues.join(', ');
   sql += ' WHERE user_id = ?';
   params.push(user_id);
