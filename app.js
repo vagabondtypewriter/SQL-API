@@ -127,7 +127,7 @@ app.post('/createUser', (req, res) => {
   });
 });
 
-app.post('/getNumUsers', (req, res) => {
+app.get('/getNumUsers', (req, res) => {
 
   let sql = `SELECT COUNT(*) FROM user;`; 
   pool.query(sql, params, (err, results) => {
