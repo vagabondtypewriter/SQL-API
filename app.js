@@ -1,16 +1,16 @@
 const express = require('express');
 const mysql = require('mysql');
-
+const cors = require('cors');
 const pool = mysql.createPool({
   connectionLimit: 10,
   host: 'localhost',
-  user: 'sandbox',
-  password: 'smartgamesandbox',
+  user: 'testUser',
+  password: 'testPassword',
   database: 'smart_sandbox'
 });
 
 const app = express();
-
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/getUsers', (req, res) => {
@@ -28,7 +28,7 @@ app.get('/getUsers', (req, res) => {
     }
   } else {
     console.log("Sending with default limit");
-    sql += ` LIMIT ${parseInt(limit)}`;
+    sql += ` LIMIT 20`;
   }
 
   pool.query(sql, (err, results) => {
@@ -42,7 +42,10 @@ app.get('/getUsers', (req, res) => {
   });
 });
 
+
 app.get('/getUser', (req, res) => {
+  console.log("init");
+console.log(req);
   const user_id = req.query.user_id;
   const display_name = req.query.display_name;
   const email = req.query.email;
@@ -174,7 +177,7 @@ app.get('/editUser', (req, res) => {
   });
 });
 
-const port = process.env.PORT || 9997;
+const port = process.env.PORT || 9998;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
