@@ -130,7 +130,7 @@ app.post('/createUser', (req, res) => {
 app.get('/getNumUsers', (req, res) => {
 
   let sql = `SELECT COUNT(*) FROM user;`; 
-  pool.query(sql, params, (err, results) => {
+  pool.query(sql, (err, results) => {
     if (err) {
       console.error('Error executing MySQL query:', err);
       res.status(500).json({ error: 'Internal Server Error' });
