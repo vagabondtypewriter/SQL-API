@@ -2,7 +2,7 @@ const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors');
 
-const {validate_password, encrypt_password} = require('./bcrypt');
+const bcrypt = require('./bcrypt');
 
 const pool = mysql.createPool({
   connectionLimit: 10,
@@ -107,7 +107,7 @@ app.get('/deleteUser', (req, res) => {
 
 app.post('/createUser', (req, res) => {
   let { display_name, password, email } = req.body;
-    password = encrypt_password(password);
+    password = bcrypt.encryptPassword(password);
 
   if (!display_name || !password || !email) {
     res.status(400).json({ error: 'display_name, password, and email are required in the request body.' });
@@ -162,7 +162,7 @@ app.get('/editUser', (req, res) => {
   }
   if (password) {
     setValues.push('hashed_password = ?');
-    params.push(encrypt_password(password));
+    params.push(bcrypt.encryptPassword(password));
   }
   if (email) {
     setValues.push('email = ?');
