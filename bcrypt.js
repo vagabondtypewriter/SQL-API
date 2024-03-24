@@ -33,23 +33,10 @@ function encryptPassword(inputPassword) {
     if (err) {
       console.error("Error hashing!");
       return;
+    } else {
+      return hash;
     }
-    console.log("Hashed password:", hash);
-    const exampleUser = {
-      id: 1,
-      name: "London",
-      password: hash
-    }
-  
-    // REPLACE THIS LATER DURING IMPLEMENTATION FOR ACTUAL SAVING TO DATABASE
-    const jsonString = JSON.stringify(exampleUser);    
 
-    try {
-      fs.writeFileSync('data.json', jsonString);
-      console.log('Data written to file');
-    } catch (err) {
-      console.error(err);
-    }
   });
 }
 
