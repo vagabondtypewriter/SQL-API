@@ -105,9 +105,10 @@ app.get('/deleteUser', (req, res) => {
   });
 });
 
-app.post('/createUser', (req, res) => {
+app.post('/createUser', async (req, res) => {
   let { display_name, password, email } = req.body;
-    password = bcrypt.encryptPassword(password);
+
+  password = await bcrypt.encryptPassword(password);
 
   if (!display_name || !password || !email) {
     res.status(400).json({ error: 'display_name, password, and email are required in the request body.' });
@@ -126,6 +127,7 @@ app.post('/createUser', (req, res) => {
     res.json({ message: 'User created successfully.' });
   });
 });
+
 
 app.get('/getNumUsers', (req, res) => {
 
