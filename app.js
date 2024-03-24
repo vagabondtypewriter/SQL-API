@@ -141,7 +141,7 @@ app.get('/getNumUsers', (req, res) => {
   });
 });
 
-app.get('/editUser', (req, res) => {
+app.get('/editUser', async (req, res) => {
   const user_id = req.query.user_id;
   const display_name = req.query.display_name;
   const password = req.query.password;
@@ -161,8 +161,9 @@ app.get('/editUser', (req, res) => {
     params.push(display_name);
   }
   if (password) {
+    const hashedPassword = await bcrypt.encryptPassword(password); // Await here
     setValues.push('hashed_password = ?');
-    params.push(bcrypt.encryptPassword(password));
+    params.push(hashedPassword);
   }
   if (email) {
     setValues.push('email = ?');
@@ -194,6 +195,7 @@ app.get('/editUser', (req, res) => {
     res.json({ message: 'User updated successfully.' });
   });
 });
+
 
 const port = process.env.PORT || 9998;
 app.listen(port, () => {
