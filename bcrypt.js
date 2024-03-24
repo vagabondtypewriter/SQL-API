@@ -29,14 +29,15 @@ function passwordIsCorrect(inputPassword, retrievedData) {
  * @param {string} inputPassword The password that is to be encrypted
  */
 function encryptPassword(inputPassword) {
-  bcrypt.hash(inputPassword, saltRounds, function(err, hash) {
-    if (err) {
-      console.error("Error hashing!");
-      return;
-    } else {
-      return hash;
-    }
-
+  return new Promise((resolve, reject) => {
+    bcrypt.hash(inputPassword, saltRounds, function(err, hash) {
+      if (err) {
+        console.error("Error hashing:", err);
+        reject(err);
+      } else {
+        resolve(hash);
+      }
+    });
   });
 }
 
