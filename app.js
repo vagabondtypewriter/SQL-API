@@ -14,7 +14,7 @@ const pool = mysql.createPool({
 
 const app = express();
 app.use(cors());
-app.use(express.urlencoded());
+app.use(express.json({extended : true}));
 
 app.get('/getUsers', (req, res) => {
   const offset = req.query.offset;
