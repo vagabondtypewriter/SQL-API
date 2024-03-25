@@ -147,6 +147,7 @@ app.get('/getNumUsers', (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
       return;
     } else {
+      console.log(res.json(results));
       res.json(results);
     }
   });
