@@ -108,7 +108,13 @@ app.get('/deleteUser', (req, res) => {
 app.post('/createUser', async (req, res) => {
   let { display_name, password, email } = req.body;
 
-  password = await bcrypt.encryptPassword(password);
+  password = await bcrypt.encryptPassword(password)
+  .catch(err => {
+    console.error('Error encrypting password:', err);
+    // Handle the error appropriately, e.g., return an error response
+    res.status(500).json({ error: 'Internal Server Error' });
+    return; // Ensure to return from the function after handling the error
+  });
 
   if (!display_name || !password || !email) {
     res.status(400).json({ error: 'display_name, password, and email are required in the request body.' });
