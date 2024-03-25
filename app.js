@@ -139,17 +139,17 @@ app.post('/createUser', async (req, res) => {
 
 
 app.get('/getNumUsers', (req, res) => {
-
-  let sql = `SELECT COUNT(*) FROM user;`; 
+  let sql = `SELECT COUNT(*) AS count FROM user`; 
   pool.query(sql, (err, results) => {
     if (err) {
       console.error('Error executing MySQL query:', err);
       res.status(500).json({ error: 'Internal Server Error' });
       return;
-    } else {
-      console.log(results);
-      res.json(results);
     }
+    
+    const count = results[0].count;
+
+    res.json({ count: count });
   });
 });
 
