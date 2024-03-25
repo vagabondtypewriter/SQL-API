@@ -107,7 +107,7 @@ app.get('/deleteUser', (req, res) => {
 
 app.post('/createUser', async (req, res) => {
   let { display_name, password, email } = req.body;
-
+  console.log("Password: " + password);
   password = await bcrypt.encryptPassword(password)
   .catch(err => {
     console.error('Error encrypting password:', err);
