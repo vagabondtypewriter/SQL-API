@@ -25,13 +25,13 @@ app.get('/getUsers', (req, res) => {
   if (limit !== undefined) {
     console.log("Sending with limit");
     sql += ` LIMIT ${parseInt(limit)}`;
-    if (offset !== undefined) {
-      console.log("Sending with offset");
-      sql += ` OFFSET ${parseInt(offset)}`;
-    }
   } else {
     console.log("Sending with default limit");
     sql += ` LIMIT 20`;
+  }
+  if (offset !== undefined) {
+    console.log("Sending with offset");
+    sql += ` OFFSET ${parseInt(offset)}`;
   }
 
   pool.query(sql, (err, results) => {
