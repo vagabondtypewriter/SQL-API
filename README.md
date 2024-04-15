@@ -1,1 +1,1 @@
-This will likely be abandoned once the client sets up a git repo so we can just push onto that one
+This is the repository for the SQL-API for BCIT SMART Sandbox
